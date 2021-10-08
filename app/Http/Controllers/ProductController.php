@@ -205,8 +205,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
+        $product = Product::findOrfail($id);
         DB::beginTransaction();
         try {
             $path = public_path('upload/product/');
