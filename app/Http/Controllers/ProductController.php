@@ -53,7 +53,7 @@ class ProductController extends Controller
         // return $image_name;
 
         $validator = Validator::make($request->all(), [
-            'name'   => 'required',
+            'name'   => 'required|unique:products',
             'description' => 'required',
             'purchase_price' => 'required',
             'sell_price' => 'required',
@@ -81,13 +81,11 @@ class ProductController extends Controller
                         $const->aspectRatio();
                     })->save($path.''.$image_name);
                     $request['img'] = $image_name;
+                    $request['path_img'] = url('/upload/product/'.$image_name);
                 }
             }
 
             $product = Product::create($request->all());
-            $digit = generateDigit($product->id);
-            $code = 'Pro' . $digit;
-            $product->update(['code' => $code]);
             DB::commit();
             return response()->json([
                 'success' => true,
@@ -112,8 +110,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
+        $product = Product::findOrfail($id);
         return response()->json([
             'success' => true,
             'message' => 'Detail Data Product',
@@ -140,14 +139,15 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request)
     {
+        $product = Product::findOrfail($request->id);
         $validator = Validator::make($request->all(), [
-            'name'   => 'required',
+            'name'   => 'required|unique:products,name,' . $product->id,
             'description' => 'required',
             'purchase_price' => 'required',
             'sell_price' => 'required',
-            'myimg' => 'nullable|mimes:jpeg,png|max:2048',
+            'myimg' => 'nullable|image|mimes:jpeg,png|max:2048',
         ]);
         
         if ($validator->fails()) {
@@ -178,10 +178,11 @@ class ProductController extends Controller
                     }
 
                     $request['img'] = $image_name;
+                    $request['path_img'] = url('/upload/product/'.$image_name);
                 }
             }
 
-            $product = Product::update($request->all());
+            $product->update($request->all());
             DB::commit();
             return response()->json([
                 'success' => true,
@@ -192,7 +193,8 @@ class ProductController extends Controller
         }catch(Exception $ex){
             DB::rollback();return response()->json([
                 'success' => false,
-                'message' => 'Product Failed to Update',
+                'message' => $ex->getMessage(),
+                // 'message' => 'Product Failed to Update',
             ], 409);
         }
     }
