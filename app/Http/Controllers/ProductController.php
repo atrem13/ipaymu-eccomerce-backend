@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use Intervention\Image\Facades\Image as Image;
+use Image;
 
 
 class ProductController extends Controller
@@ -47,12 +47,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request->all();
+        // $image = $request->file('myimg');
+        // $image_name = time().'.'.$image->extension();
+        // return $image_name;
+
         $validator = Validator::make($request->all(), [
             'name'   => 'required',
             'description' => 'required',
             'purchase_price' => 'required',
             'sell_price' => 'required',
-            'myimg' => 'nullable|mimes:jpeg,png|max:2048',
+            'myimg' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         
         if ($validator->fails()) {
@@ -70,11 +75,11 @@ class ProductController extends Controller
                 if ($request->file('myimg')->isValid()) {
                     $image = $request->file('myimg');
                     $image_name = time().'.'.$image->extension();
-                    $img = Image::make($image->path());
+                    // $request->myimg->move($path , $image_name);
+                    $img = \Image::make($image->path());
                     $img->resize(500, 500, function ($const) {
                         $const->aspectRatio();
                     })->save($path.''.$image_name);
-
                     $request['img'] = $image_name;
                 }
             }
@@ -91,7 +96,8 @@ class ProductController extends Controller
             ], 201);
 
         }catch(Exception $ex){
-            DB::rollback();return response()->json([
+            DB::rollback();
+            return response()->json([
                 'success' => false,
                 'message' => 'Product Failed to Save',
             ], 409);
