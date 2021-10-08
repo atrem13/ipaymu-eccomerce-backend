@@ -175,6 +175,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // IMG
+        'Intervention\Image\ImageServiceProvider',
+
     ],
 
     /*
@@ -228,6 +231,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        // IMG
+        'Image' => 'Intervention\Image\Facades\Image',
 
     ],
 
