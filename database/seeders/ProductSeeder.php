@@ -22,6 +22,8 @@ class ProductSeeder extends Seeder
                 "description" => $faker->sentence(),
                 "purchase_price" => $faker->numberBetween(5000, 100000),
                 "sell_price" => $faker->numberBetween(5000, 150000),
+                "created_at" => $faker->dateTimeBetween('-1 week', '+1 week'),
+                "updated_at" => $faker->dateTimeBetween('-1 week', '+1 week'),
             ]);
         }
     }
