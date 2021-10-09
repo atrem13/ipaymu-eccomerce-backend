@@ -13,6 +13,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    use \App\Http\Traits\UsesUuid;
     /**
      * The attributes that are mass assignable.
      *
@@ -23,19 +24,6 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
-    protected static function boot() {
-        static::creating(function ($model) {
-            if ( ! $model->getKey()) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
-
-    public function getIncrementing()
-    {
-        return false;
-    }
 
     /**
      * The attributes that should be hidden for serialization.

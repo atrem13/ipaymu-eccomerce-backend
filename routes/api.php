@@ -22,4 +22,10 @@ Route::post('/product', 'ProductController@store');
 Route::get('/product/{id}', 'ProductController@show');
 Route::post('/product/update', 'ProductController@update');
 Route::delete('/product/{id}', 'ProductController@destroy');
+
+Route::get('/user', 'UserController@index');
+Route::post('/user', 'UserController@store');
+Route::get('/user/{id}', 'UserController@show');
+Route::post('/user/update', 'UserController@update');
+Route::delete('/user/{id}', 'UserController@destroy');
 // Route::resource('product', 'ProductController');

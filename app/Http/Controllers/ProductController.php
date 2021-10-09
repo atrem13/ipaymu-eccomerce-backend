@@ -29,15 +29,6 @@ class ProductController extends Controller
         ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -47,10 +38,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->all();
-        // $image = $request->file('myimg');
-        // $image_name = time().'.'.$image->extension();
-        // return $image_name;
 
         $validator = Validator::make($request->all(), [
             'name'   => 'required|unique:products',
@@ -121,16 +108,6 @@ class ProductController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
